@@ -1,0 +1,19 @@
+package org.zerock.w2.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+//서비스,컨트롤러 계층에서 사용
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MemberDTO {
+
+    private String mid;
+    private String mpw;
+    private String mname;
+    private String uuid;
+}
