@@ -46,6 +46,12 @@ dependencies {
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     //java.lang.NoClassDefFoundError (javax.annotation.Entity / javax.annotation.Generated) 에러 발생 대응을 위한 코드 이다.
 
+    //ModelMapper 설정
+    implementation 'org.modelmapper:modelmapper:3.1.0'
+
+    //valid
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 }
 
 tasks.named('test') {

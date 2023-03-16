@@ -24,7 +24,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         JPQLQuery<Board> query = from(board); //select..from board
 
-        BooleanBuilder booleanBuilder = new BooleanBuilder();//(
+        BooleanBuilder booleanBuilder = new BooleanBuilder();//Querydsl 이용할 떄 '()'필요한 상황시 BooleanBuilder 이용 =>(
 
         booleanBuilder.or(board.title.contains("11")); //title like...
 
@@ -36,11 +36,11 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         query.where(board.title.contains("1")); // where title like...
 
         //paging
-        this.getQuerydsl().applyPagination(pageable,query);
+        this.getQuerydsl().applyPagination(pageable,query); //=>쿼리에 limit 적용됨
 
-        List<Board> list = query.fetch();
+        List<Board> list = query.fetch(); //fetch() JPQLQuery의 실행
 
-        long count = query.fetchCount();
+        long count = query.fetchCount(); //fetchCount() count쿼리 실행 가능
 
         return null;
     }
@@ -48,11 +48,11 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
     @Override
     public Page<Board> searchAll(String[] types, String keyword, Pageable pageable) {
 
-        QBoard board = QBoard.board;
-        JPQLQuery<Board> query = from(board);
+        QBoard board = QBoard.board; //Q도메인 객체
+        JPQLQuery<Board> query = from(board); //select..from board
 
         if((types !=null && types.length>0) && keyword != null){ //검색조건과 키워드가 있다면
-            BooleanBuilder booleanBuilder = new BooleanBuilder();  //(
+            BooleanBuilder booleanBuilder = new BooleanBuilder();  //Querydsl 이용할 떄 '()'필요한 상황시 BooleanBuilder 이용=>(
             for(String type: types){
                 switch (type){
                     case "t":
@@ -79,6 +79,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
 
         long count = query.fetchCount();
 
-        return new PageImpl<>(list,pageable,count); //list<T> 실제 목록 데이터, Pageable 페이지 관련 정보를 가진 객체, long 전체갯수
+        return new PageImpl<>(list,pageable,count);
+        //list<T> 실제 목록 데이터, Pageable 페이지 관련 정보를 가진 객체, long 전체갯수
     }
 }
