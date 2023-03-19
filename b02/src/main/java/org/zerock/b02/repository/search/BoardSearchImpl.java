@@ -89,6 +89,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
     @Override
     public Page<BoardListReplyCountDTO> searchWithReplyCount(String[] types, String keyword, Pageable pageable) {
 
+        //Q도메인 객체
         QBoard board = QBoard.board;
         QReply reply = QReply.reply;
 
@@ -123,12 +124,22 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         //Projections : JPQL의 결과를 바로 DTO로 처리하는 기능
         JPQLQuery<BoardListReplyCountDTO> dtoQuery = query.select(Projections.bean(BoardListReplyCountDTO.class,
                 board.bno,board.title,board.writer,board.regDate,reply.count().as("replyCount")));
+    //        select board.bno, board.title, board.writer, board.regDate, count(reply) as replyCount
+    //        from Board board
+    //        left join Reply reply with reply.board = board
+    //        where (board.title like ?1 escape '!' or board.content like ?2 escape '!' or board.writer like ?3 escape '!') and board.bno > ?4
+    //        group by board
 
-        //paging
-        this.getQuerydsl().applyPagination(pageable,dtoQuery);
+        this.getQuerydsl().applyPagination(pageable,dtoQuery); //쿼리문이군....
+    //        select board.bno, board.title, board.writer, board.regDate, count(reply) as replyCount
+    //        from Board board
+    //        left join Reply reply with reply.board = board
+    //        where (board.title like ?1 escape '!' or board.content like ?2 escape '!' or board.writer like ?3 escape '!') and board.bno > ?4
+    //        group by board
+    //        order by board.bno desc, board.bno desc
 
         List<BoardListReplyCountDTO> dtoList = dtoQuery.fetch();
-
+        System.out.println(dtoList);
         long count = dtoQuery.fetchCount();
 
         return new PageImpl<>(dtoList,pageable,count);

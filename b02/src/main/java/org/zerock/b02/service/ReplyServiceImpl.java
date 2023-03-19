@@ -44,7 +44,7 @@ public class ReplyServiceImpl implements ReplyService{
 
         Reply reply = replyOptional.orElseThrow();
 
-        return modelMapper.map(reply,ReplyDTO.class);
+        return modelMapper.map(reply,ReplyDTO.class); //vo -> dto
     }
 
     @Override
@@ -67,10 +67,14 @@ public class ReplyServiceImpl implements ReplyService{
 
     }
 
+    //특정 게시물의 댓글 목록 페이징 처리
     @Override
     public PageResponseDTO<ReplyDTO> getListOfBoard(Long bno, PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <=0 ? 0:
+        System.out.println(bno);
+        System.out.println(pageRequestDTO);
+
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <= 0 ? 0:
                 pageRequestDTO.getPage()-1, pageRequestDTO.getSize(), Sort.by("rno").ascending());
 
         Page<Reply> result = replyRepository.listOfBoard(bno,pageable);

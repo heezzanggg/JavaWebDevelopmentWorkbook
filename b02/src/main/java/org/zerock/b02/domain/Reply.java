@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "board")
+@ToString(exclude = "board") //@ToString 의 exclude 속성 : 참조하는 객체를 사용하지않도록 하는 속성값
 public class Reply extends BaseEntity{
 
     @Id

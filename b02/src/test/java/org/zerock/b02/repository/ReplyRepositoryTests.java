@@ -43,6 +43,7 @@ public class ReplyRepositoryTests {
         Pageable pageable = PageRequest.of(0,10, Sort.by("rno").descending());
 
         Page<Reply> result = replyRepository.listOfBoard(bno,pageable);
+        log.info(result.getContent());
 
         result.getContent().forEach(reply -> log.info(reply));
     }

@@ -13,5 +13,5 @@ public class BoardListReplyCountDTO {
     private String writer;
     private LocalDateTime regDate;
 
-    private Long replyCount;
+    private Long replyCount; //특정게시물에 속한 댓글의 갯수
 }

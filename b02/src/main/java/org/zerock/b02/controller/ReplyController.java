@@ -41,9 +41,11 @@ public class ReplyController {
 //        Map<String,Long> resultMap = new HashMap<>();
 //        resultMap.put("rno",111l);
 //
+//        log.info(resultMap);
 //        return resultMap;
 //    }
 
+    //댓글 등록
     @ApiOperation(value = "Replies POST", notes = "POST 방식으로 댓글 등록") //ApiOperation : Swagger UI에서 해당 기능의 설명으로 출력 됨
     @PostMapping(value = "/",consumes = MediaType.APPLICATION_JSON_VALUE) //PostMapping의 consumes속성 : 해당 메소드를 받아서 소비하는 데이터가 어떤 종류인지 명시 할 수 있음
     public Map<String,Long> register(@Valid @RequestBody ReplyDTO replyDTO,
@@ -72,7 +74,7 @@ public class ReplyController {
         //PathVariable : 호출하는 경로의 값을 직접 파라미터의 변수로 처리할 수 있는 방법 제공
         PageResponseDTO<ReplyDTO> responseDTO = replyService.getListOfBoard(bno,pageRequestDTO);
         log.info("+++++++++++++++++++++++");
-        log.info(responseDTO);
+        log.info(responseDTO); //PageResponseDTO(page=0, size=0, total=0, start=0, end=0, prev=false, next=false, dtoList=null)
         return responseDTO;
     }
 
@@ -105,7 +107,6 @@ public class ReplyController {
     @PutMapping (value = "/{rno}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String,Long> modify(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO){
 
-        System.out.println("시작???!!!!!!"+rno);
         System.out.println(replyDTO);
 
         replyDTO.setRno(rno); //번호를 일치시킴

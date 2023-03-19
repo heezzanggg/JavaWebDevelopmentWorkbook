@@ -13,6 +13,7 @@
           Board Read
         </div>
         <div class="card-body">
+
           <div class="input-group mb-3">
             <span class="input-group-text">Bno</span>
             <input type="text" class="form-control" th:value="${dto.bno}" readonly>
@@ -49,7 +50,6 @@
             </div>
           </div>
 
-
         </div><!--end card body-->
       </div><!--end card-->
     </div><!--end col-->
@@ -76,10 +76,12 @@
   <div class="modal registerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
           <h5 class="modal-title">Register Reply</h5>
           <button type="button" class="btn-close" data-bs-dismisson="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text">Reply Text</span>
@@ -90,10 +92,12 @@
             <input type="text" class="form-control replyer">
           </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-primary registerBtn">Register</button>
           <button type="button" class="btn btn-outline-dark closeRegisterBtn">Close</button>
         </div>
+
       </div>
     </div>
   </div><!--end register modal-->
@@ -102,21 +106,25 @@
   <div class="modal modifyModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
           <h5 class="modal-title replyHeader"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text">Reply Text</span>
             <input type="text" class="form-control modifyText">
           </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-info modifyBtn">Modify</button>
           <button type="button" class="btn btn-danger removeBtn">Remove</button>
           <button type="button" class="btn btn-outline-dark closeModifyBtn">Close</button>
         </div>
+
       </div>
     </div>
   </div><!--modifyModal-->
@@ -131,16 +139,36 @@
 
   const bno = [[${dto.bno}]]
 
+  //console.log(get1(bno))
+  // => Promise반환, 결과물 보고싶으면 then()사용해야함
+
   // get1(bno).then(data=>{
   //   console.log(data)
   // }).catch(e=>{
   //   console.error(e)
   // })
 
-  const replyList = document.querySelector('.replyList') //댓글 목록 DOM
-  const replyPaging = document.querySelector('.replyPaging') //페이지목록 DOM
 
-  function printList(dtoList){//댓글 목록 출력
+  function printReplies(page,size,goLast){
+    getList({bno,page,size,goLast}).then(data=>{
+      console.log(data) //page, size, total, start, end, prev, next, dtoList의 정보
+      printList(data.dtoList) //목록처리
+      printPages(data) //페이지처리
+    }).catch(e=>{
+      console.error(e)
+    })
+  }
+
+  printReplies(1,10,false)//처음부터 마지막 페이지 보고싶으면 true, 첫페이지 보고싶으면 false
+
+  const replyList = document.querySelector('.replyList') //댓글 목록 DOM
+  const replyPaging = document.querySelector('.replyPaging') //댓글 페이지목록 DOM
+
+  //댓글 목록 출력
+  function printList(dtoList){
+    console.log("댓글목록")
+    console.log(dtoList)
+
     let str = '';
 
     if(dtoList && dtoList.length>0){
@@ -150,13 +178,14 @@
                <span class="col-6" data-rno="${dto.rno}">${dto.replyText}</span>
                <span class="col-2">${dto.replyer}</span>
                <span class="col-2">${dto.regDate}</span>
-                </li>`
+               </li>`
       }
     }
     replyList.innerHTML = str
   }
 
-  function printPages(data){//페이지 목록 출력
+  //댓글 페이지 목록 출력
+  function printPages(data){
     //pagination
     let pageStr = '';
 
@@ -173,22 +202,15 @@
     }
 
     if(data.next){
-      pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end +1}">NEXT</a></li>`
+      pageStr += `<li class="page-item">
+                <a class="page-link" data-page="${data.end +1}">NEXT</a>
+                </li>`
     }
+
     replyPaging.innerHTML = pageStr
 
   }
 
-  function printReplies(page,size,goLast){
-    getList({bno,page,size,goLast}).then(data=>{
-      console.log(data)
-      printList(data.dtoList) //목록처리
-      printPages(data) //페이지처리
-    }).catch(e=>{
-      console.error(e)
-    })
-  }
-  printReplies(1,10,true)//무조건 호출
 
   //댓글 등록 모달
   const registerModal = new bootstrap.Modal(document.querySelector(".registerModal"))
@@ -199,17 +221,20 @@
   const replyer = document.querySelector(".replyer")
   const closeRegisterBtn = document.querySelector(".closeRegisterBtn")
 
-  //modal show()
+  //댓글 등록 modal show()
   document.querySelector(".addReplyBtn").addEventListener("click",function (e){
     registerModal.show()
   },false)
 
-  //modal close()
+  //댓글 등록 modal close()
   closeRegisterBtn.addEventListener("click",function (e){
     registerModal.hide()
   },false)
+      // document.querySelector(".closeModifyBtn").addEventListener("click",function (e){
+      //   registerModal.hide()
+      // },false)
 
-  //
+  //댓글 등록 버튼 기능
   registerBtn.addEventListener("click",function (e){
     const replyObj = {
       bno : bno,
@@ -217,6 +242,7 @@
       replyer : replyer.value}
 
     console.log(replyObj)
+
     addReply(replyObj).then(result=>{
       alert(result.rno)
       registerModal.hide()
@@ -228,9 +254,10 @@
     })
   },false)
 
-
-  let page =1
+  let page = 1
   let size = 10
+  //page,size 별도 변수 처리한 이유 : 나중에 댓글 수정과 같은 작업에서 현재 페이지 번호를 유지해야할 가능성때문
+
 
   //댓글 페이지 이동
   replyPaging.addEventListener("click", function (e){
@@ -238,7 +265,7 @@
     e.preventDefault()
     e.stopPropagation()
 
-    const target = e.target
+    const target = e.target //<a class="page-link" data-page="${i}">${i}</a>
 
     if(!target || target.tagName != 'A'){
       return
@@ -250,7 +277,7 @@
 
   },false)
 
-  //modifyModal
+  //modifyModal =>댓글 조회 후 수정 or 삭제
   const modifyModal = new bootstrap.Modal(document.querySelector(".modifyModal"))
 
   const replyHeader = document.querySelector(".replyHeader")
@@ -263,9 +290,9 @@
     e.preventDefault()
     e.stopPropagation()
 
-    const target = e.target
+    const target = e.target //  <span class="col-6" data-rno="${dto.rno}">${dto.replyText}</span>
 
-    if(!target || target.tagName != 'SPAN'){
+    if(!target || target.tagName != 'SPAN'){ //target이 없거나 target의 태그네임이 span이 아닐 경우
       return
     }
 
@@ -275,23 +302,23 @@
       return
     }
 
-    console.log(rno)
-    getReply(rno).then(reply => { //댓글의 내용을 모달창에 채워서 보여주는
+    //댓글의 내용을 모달창에 채워서 보여주는
+    getReply(rno).then(reply => {
 
       replyHeader.innerHTML = reply.rno
       modifyText.value = reply.replyText
       modifyModal.show()
-
     }).catch(e => alert('error'))
 
   },false)
 
+  //댓글 수정모달의 수정 버튼 기능
   modifyBtn.addEventListener("click",function (e){
 
     const replyObj = {
       bno : bno,
       rno : replyHeader.innerHTML,
-      replyText:modifyText.value}
+      replyText : modifyText.value}
 
     modifyReply(replyObj).then(result=>{
       alert(result.rno+'댓글이 수정되었습니다.')
@@ -303,10 +330,12 @@
     })
   },false)
 
+  //댓글 수정모달 close 버튼 기능
   closeModifyBtn.addEventListener("click",function (e){
     modifyModal.hide()
   },false)
 
+  //댓글 수정모달의 삭제 버튼 기능
   removeBtn.addEventListener("click",function (e){
     removeReply(replyHeader.innerHTML).then(result=>{
       alert(result.rno+'댓글이 삭제되었습니다.')
