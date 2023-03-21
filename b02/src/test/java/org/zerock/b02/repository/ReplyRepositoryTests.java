@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.zerock.b02.domain.Board;
 import org.zerock.b02.domain.Reply;
-import org.zerock.b02.dto.BoardListReplyCountDTO;
 
 @SpringBootTest
 @Log4j2
@@ -47,6 +46,7 @@ public class ReplyRepositoryTests {
 
         result.getContent().forEach(reply -> log.info(reply));
     }
+
 
 
 }

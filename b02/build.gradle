@@ -56,6 +56,10 @@ dependencies {
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
+    //Thumbnail 라이브러리  : 첨부파일의 이미지 용량 줄이기
+    implementation 'net.coobird:thumbnailator:0.4.16'
+
+
 }
 
 tasks.named('test') {

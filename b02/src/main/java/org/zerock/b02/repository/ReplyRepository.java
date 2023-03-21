@@ -10,4 +10,7 @@ public interface ReplyRepository extends JpaRepository<Reply,Long> {
 
     @Query("select r from Reply r where r.board.bno = :bno")
     Page<Reply> listOfBoard(Long bno, Pageable pageable);
+
+    //특정한 게시물에 해당하는 데이터들 삭제
+    void deleteByBoard_Bno(Long bno);
 }
