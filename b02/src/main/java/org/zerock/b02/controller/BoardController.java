@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,6 +48,7 @@ public class BoardController {
 
     //등록 화면 보기
     @GetMapping("/register")
+    @PreAuthorize("hasRole('USER')") //표현식을 이용해 특정한 권한을 가진 사용자만이 접근 가능하도록 지정
     public void registerGET(){
 
     }
@@ -76,6 +78,7 @@ public class BoardController {
     }
 
     //조회기능 & 수정or삭제 할 수 있는 화면
+    @PreAuthorize("isAuthenticated()")//로그인한 사용자만으로 제한
     @GetMapping({"/read", "/modify"})
     public void read(Long bno, PageRequestDTO pageRequestDTO, Model model){
 
@@ -89,6 +92,7 @@ public class BoardController {
     }
 
     //수정기능
+    @PreAuthorize("principal.username == #boardDTO.writer") //#boardDTO:현재 파라이터가 수집된 BoardDTO
     @PostMapping("/modify")
     public String modify(PageRequestDTO pageRequestDTO,
                          @Valid BoardDTO boardDTO,
@@ -128,10 +132,12 @@ public class BoardController {
 //        return "redirect:/board/list";
 //    }
 
+    @PreAuthorize("principal.username == #boardDTO.writer")
     @PostMapping("/remove")
     public String remove(BoardDTO boardDTO, RedirectAttributes redirectAttributes){
-        log.info("remove post.."+boardDTO.getBno());
+
         Long bno = boardDTO.getBno();
+        log.info("remove post.."+bno);
 
         boardService.remove(bno);
 

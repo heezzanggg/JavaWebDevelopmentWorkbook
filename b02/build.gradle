@@ -59,6 +59,13 @@ dependencies {
     //Thumbnail 라이브러리  : 첨부파일의 이미지 용량 줄이기
     implementation 'net.coobird:thumbnailator:0.4.16'
 
+    //스프링시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //Thymeleaf에서 스프링 시큐리티 사용하기 위한 라이브러리
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+
 
 }
 
