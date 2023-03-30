@@ -65,6 +65,9 @@ dependencies {
     //Thymeleaf에서 스프링 시큐리티 사용하기 위한 라이브러리
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
+    //소셜로그인 이용위한 OAuth2 Client 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 
 
 }

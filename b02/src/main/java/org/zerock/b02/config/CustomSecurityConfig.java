@@ -12,10 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.zerock.b02.security.CustomUserDetailsService;
 import org.zerock.b02.security.handler.Custom403Handler;
+import org.zerock.b02.security.handler.CustomSocialLoginSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -31,11 +33,17 @@ public class CustomSecurityConfig {
     private final DataSource dataSource;
     private final CustomUserDetailsService userDetailsService;
 
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         //CustomeUserDetailsService 정상적으로 동작하기 위해 bean 지정 후,
         //CustomeUserDetailsService에 PasswordEncoder 주입
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomSocialLoginSuccessHandler(passwordEncoder());
     }
 
     @Bean
@@ -59,6 +67,9 @@ public class CustomSecurityConfig {
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler()); //403
 
+        //OAuth2로그인 사용한다는 설정
+        //http.oauth2Login().loginPage("/member/login");
+        http.oauth2Login().loginPage("/member/login").successHandler(authenticationSuccessHandler());
         return http.build();
     }
 

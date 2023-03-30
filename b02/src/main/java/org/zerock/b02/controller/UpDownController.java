@@ -28,7 +28,7 @@ public class UpDownController {
     //파일 업로드와 파일을 보여주는 기능을 메소드로 처리 함
 
     @Value("${org.zerock.upload.path}") //import 시에 springframework 으로 시작하는 value, @Value는 application.properties 파일의 설정 정보 읽어서 변수의 값으로 사용 할 수 있음.
-    private String uploadPath;// 파일 업로드하는 경로(uploadPath:/Users/hee/upload)
+    private String uploadPath;// 파일 업로드하는 경로(/Users/hee/Desktop/GIT/upload)
 
     @ApiOperation(value = "Upload POST",notes = "POST 방식으로 파일 등록")
     @PostMapping(value = "/upload",consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
